@@ -1,0 +1,1 @@
+Have a Library Handle struct that contains: Filename, Reference Name(ex "OpenGL Renderer"), SDLHandle(type 'void *'), CreateFunction, ReleaseFunction

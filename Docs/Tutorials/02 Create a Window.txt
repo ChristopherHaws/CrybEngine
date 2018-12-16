@@ -1,0 +1,66 @@
+Creating a basic window with CRYB Engine is very simple. The first thing you de is load the Render Module.
+
+Loading the Render Module:
+In order to load this module, you need to first include all the header files, then you use the function LoadModule() to load up a module. After loading the module, you need to use LoadSystem() to load the system for that module. LoadSystem() will return a bool value, true for if everything went ok, false for if the module was not found.
+
+
+DO NOT RUN THIS PROGRAM unless you plan on going into the task manager and ending the task. There is no input control yet, so the window will run forever.
+
+
+// The header file for all the module loading functions
+#include <Modules/ceModuleLoader.h>
+
+// The headers for the render module
+#include <Modules/Renderer/ceIRenderSystem.h>
+#include <Modules/Renderer/ceIRenderDevice.h>
+#include <Modules/Renderer/ceWindowProperties.h>
+
+int main( int argc, char *argv[] )
+{
+    // This is a pointer we will use for our render system
+    ceIRenderSystem *pRenderSystem = NULL;
+    
+    // Now we use LoadModule() to load the render module with a reference name of OpenGL Renderer
+    // NOTE: I am using OpenGL as the API for this example, but you can use anything thats implemented
+    LoadModule( "ceRenderOpenGL.dll", "OpenGL Renderer" );
+    
+    // Now we load the system from within the module using LoadSystem(). We use the reference name to
+    // specify we want to load the system for the OpenGL Renderer
+	LoadSystem( "OpenGL Renderer", (ceIBaseSystem**) &pRenderSystem );
+	
+	// The device is the main part of the module, so now we should get that
+	ceIRenderDevice *pRenderDevice = pRenderSystem->CreateDevice();
+	
+	// Now we should create our device so it can be used
+	pRenderDevice->Create();
+	
+	// I use a class to encapsulate the windows properties, so now we use that to setup the window
+	ceWindowProperties pWindow;
+	pWindow.m_uiXPosition = 100;
+	pWindow.m_uiYPosition = 100;
+	pWindow.m_uiWidth = 640;
+	pWindow.m_uiHeight = 460;
+	pWindow.m_uiColorBuffer = 32;
+	pWindow.m_uiStencilBuffer = 32;
+	pWindow.m_uiDepthBuffer = 32;
+	pWindow.m_bFullscreen = false;
+	pWindow.m_bAntiAliasing = false;
+	pWindow.m_bVSync = false;
+	pWindow.m_sTitle = "CRYB Application";
+	
+	// Now, using the windows properties, we create our window
+	pRenderDevice->CreateNewWindow( &pWindow );
+	
+	// Now we create an infinate game loop
+	while( 1 )
+	{
+           // This clears the buffers: ColorBuffer, DepthBuffer, but we dont clear the StencilBuffer
+	       pRenderDevice->ClearBuffers( true, true, false );
+
+	       // This will flip the buffer, in other words refresh the screen
+	       pRenderDevice->Update();
+	}
+	
+	// Exit the program
+	return 1;
+}

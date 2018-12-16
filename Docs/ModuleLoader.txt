@@ -1,0 +1,6 @@
+One library that handles the Creation and Deletion of modules and classes inside those modules. When you load a module, all the classes are put into a database so they can be looked up. They are stored in such a way, <iClass, Class> so that you can create the class by doing something like, iClass *pClass = CreateClass<iClass>(params) where the params is the constructors parameters for that class. or something along those lines. I want the library to handle it all, not the application.
+
+The Module Loader:
+- Table for all the known interface names
+
+Make all classes that are in a module inherit iBase class. Then you can store all the classes as iBase in the module loader and just cast iClass the iBase class to get the full class.
